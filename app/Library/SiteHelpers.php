@@ -43,7 +43,7 @@ class SiteHelpers
                 return $data;
             }
 
-            if($coupon->uses == $coupon->max_uses){
+            if($coupon->uses >= $coupon->max_uses){
                 $data->validated = false;
                 $data->message = 'Coupon Not Valid Anymore';
                 return $data;

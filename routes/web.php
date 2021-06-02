@@ -11,7 +11,19 @@
 |
 */
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RetailersBooksController;
+use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\ResaleOrdersController;
+use App\Http\Controllers\Masters\PackagesController;
+use App\Http\Controllers\Masters\BooksController;
+use App\Http\Controllers\Masters\UserManagementController;
+use App\Http\Controllers\Masters\CouponController;
+use App\Http\Controllers\Masters\PushNotificationController;
+use App\Http\Controllers\APIController;
+
 Route::get('/', function () {
+    dd(public_path());
     return view('welcome');
 });
 
@@ -23,86 +35,86 @@ Route::get('/logout', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/home', 'HomeController@index')->name('retailer_onboarding');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('retailer_onboarding');
 
-Route::get('/retailers-book', 'RetailersBooksController@view');
+Route::get('/retailers-book', [RetailersBooksController::class, 'view']);
 
-Route::get('/order/view', 'OrdersController@view');
-Route::post('/order/status/update', 'OrdersController@updateStatus');
+Route::get('/order/view', [OrdersController::class, 'view']);
+Route::post('/order/status/update', [OrdersController::class, 'updateStatus']);
 
-Route::get('/resale-order/view', 'ResaleOrdersController@view');
-Route::post('/resale-order/status/update', 'ResaleOrdersController@updateStatus');
+Route::get('/resale-order/view', [ResaleOrdersController::class, 'view']);
+Route::post('/resale-order/status/update', [ResaleOrdersController::class, 'updateStatus']);
 
 Route::group(['prefix' => 'master'], function() {
     //
     Route::group(['prefix' => 'packages'], function() {
-        Route::get('/view', 'Masters\PackagesController@view');
-        Route::post('/update', 'Masters\PackagesController@update');
+        Route::get('/view', [PackagesController::class, 'view']);
+        Route::post('/update', [PackagesController::class, 'update']);
     });
 
     Route::group(['prefix' => 'books'], function() {
-        Route::get('/view', 'Masters\BooksController@view');
-        Route::post('/update', 'Masters\BooksController@bookUpdate');
+        Route::get('/view', [BooksController::class, 'view']);
+        Route::post('/update', [BooksController::class, 'bookUpdate']);
     });
 });
 
 
 Route::group(['prefix' => 'user-management'], function() {
     //
-    Route::get('users/view', 'UserManagementController@view');
-    Route::get('/users/get/{id}', 'UserManagementController@getUser');
-    Route::post('/users/update', 'UserManagementController@updateUser');
+    Route::get('users/view', [UserManagementController::class, 'view']);
+    Route::get('/users/get/{id}', [UserManagementController::class, 'getUser']);
+    Route::post('/users/update', [UserManagementController::class, 'updateUser']);
 
 
-    Route::get('/roles/view', 'UserManagementController@rolesView');
-    Route::get('/role/get/{id}', 'UserManagementController@getRole');
-    Route::post('/roles/update', 'UserManagementController@updateRole');
+    Route::get('/roles/view', [UserManagementController::class, 'rolesView']);
+    Route::get('/role/get/{id}', [UserManagementController::class, 'getRole']);
+    Route::post('/roles/update', [UserManagementController::class, 'updateRole']);
 });
 
 
 Route::group(['prefix' => 'coupon'], function() {
     //
-    Route::get('/view', 'CouponController@view');
-    Route::post('/update', 'CouponController@update');
+    Route::get('/view', [CouponController::class, 'view']);
+    Route::post('/update', [CouponController::class, 'update']);
     // Route::group(['prefix' => 'books'], function() {
     // });
 });
 
 Route::group(['prefix' => 'push-notification'], function() {
     //
-    Route::get('/view', 'PushNotificationController@view');
-    Route::post('/send', 'PushNotificationController@send');
+    Route::get('/view', [PushNotificationController::class, 'view']);
+    Route::post('/send', [PushNotificationController::class, 'send']);
     // Route::group(['prefix' => 'books'], function() {
     // });
 });
 
 
 Route::group(['prefix' => 'api'], function() {
-    Route::post('/retailer-details/update', 'APIController@retailerDetailsUpdate');
-    Route::post('/retailers-book/update', 'RetailersBooksController@update');
+    Route::post('/retailer-details/update', [APIController::class, 'retailerDetailsUpdate']);
+    Route::post('/retailers-book/update', [RetailersBooksController::class, 'update']);
 
-    Route::get('/inventory/datatable', 'InventoryController@inventoryDatatables');
-    Route::post('/inventory/update', 'InventoryController@update');
+    Route::get('/inventory/datatable', [InventoryController::class, 'inventoryDatatables']);
+    Route::post('/inventory/update', [InventoryController::class, 'update']);
 
 
     // datatables api
-    Route::get('/retailers-books/datatable', 'RetailersBooksController@datatable');
+    Route::get('/retailers-books/datatable', [RetailersBooksController::class, 'datatable']);
 
-    Route::get('/books/datatable', 'Masters\BooksController@datatable');
+    Route::get('/books/datatable', [Masters\BooksController::class, 'datatable']);
 
-    Route::get('/orders/datatable', 'OrdersController@datatable');
+    Route::get('/orders/datatable', [OrdersController::class, 'datatable']);
 
-    Route::get('/resale-order/datatable', 'ResaleOrdersController@datatable');
+    Route::get('/resale-order/datatable', [ResaleOrdersController::class, 'datatable']);
 
-    Route::get('/coupon/datatable', 'CouponController@datatables');
+    Route::get('/coupon/datatable', [CouponController::class, 'datatables']);
 
-    Route::get('/packages/datatable', 'Masters\PackagesController@datatable');
+    Route::get('/packages/datatable', [Masters\PackagesController::class, 'datatable']);
 
-    Route::get('/push-notification/datatable', 'PushNotificationController@datatable');
+    Route::get('/push-notification/datatable', [PushNotificationController::class, 'datatable']);
 
-    Route::get('/users/datatable', 'UserManagementController@usersDatatable');
+    Route::get('/users/datatable', [UserManagementController::class, 'usersDatatable']);
 
-    Route::get('/roles/datatable', 'UserManagementController@rolesDatatable');
+    Route::get('/roles/datatable', [UserManagementController::class, 'rolesDatatable']);
 });
 

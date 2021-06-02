@@ -15,6 +15,7 @@ use App\PushNotification;
 use App\ResaleOrder;
 use App\ResaleOrderDetails;
 use App\RetailersDetail;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Http\Request;
@@ -79,6 +80,17 @@ class APIController extends Controller
             $customer->email = $request['email'];
             $customer->mobile = $request['mobile'];
             $customer->player_id = $request['player_id'];
+
+            if(!$customer->id){
+                try{
+                    $customer->id = Customer::orderBy('id', 'desc')->first()->id + 1;
+                } catch(Exception $e) {
+                    $customer->id = 1;
+                }
+            }
+
+
+
             $customer->save();
 
             return \Response::json([
